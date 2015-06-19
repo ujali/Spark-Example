@@ -7,6 +7,7 @@ import org.apache.spark.SparkContext
 import org.apache.spark.mllib.classification.LogisticRegressionWithSGD
 import org.apache.spark.mllib.feature.HashingTF
 import org.apache.spark.mllib.regression.LabeledPoint
+import org.apache.spark.mllib.linalg.Vectors
 
 
 object MLlib extends App {
@@ -29,6 +30,8 @@ object MLlib extends App {
   val positive = spam.map(features => LabeledPoint(1, features))
   val negative = normal.map(features => LabeledPoint(0, features))
   val trainingData = positive.union(negative)
+  val pos = LabeledPoint(1.0, Vectors.dense(1.0, 0.0))
+
   trainingData.cache()
   val model = new LogisticRegressionWithSGD().run(trainingData)
   // Test on a positive example (spam) and a negative one (normal).
